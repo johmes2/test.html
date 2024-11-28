@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -152,6 +153,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Preloader -->
     <div id="preloader">
@@ -191,7 +193,32 @@
             </a>
         </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDkhGKUTHuJDSn_ZWDC6oWRPCRy-ta10c0",
+            authDomain: "project-1-5b4bd.firebaseapp.com",
+            databaseURL: "https://project-1-5b4bd-default-rtdb.firebaseio.com",
+            projectId: "project-1-5b4bd",
+            storageBucket: "project-1-5b4bd.appspot.com",
+            messagingSenderId: "164037063325",
+            appId: "1:164037063325:web:6cd1610f52d25cb5575a74",
+            measurementId: "G-LLRRJLBBRD",
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+    </script>
+
+    <!-- Telegram Web App API -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <!-- Main JavaScript -->
     <script src="main.js"></script>
 </body>
 </html>
