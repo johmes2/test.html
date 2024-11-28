@@ -1,3 +1,27 @@
+// Preloader logic
+window.onload = function () {
+    setTimeout(() => {
+        document.getElementById("preloader").style.display = "none";
+        checkForTelegramUsername();
+    }, 100);
+};
+
+// Check for Telegram username and initialize user data
+function checkForTelegramUsername() {
+    if (window.Telegram && Telegram.WebApp) {
+        const telegramUser = Telegram.WebApp.initDataUnsafe.user;
+
+        if (telegramUser && telegramUser.username) {
+            initializeUserData(telegramUser.id, telegramUser.username);
+            showMainContent(telegramUser.username);
+        } else {
+            alert("Unable to retrieve Telegram username. Please ensure the app is opened via Telegram.");
+        }
+    } else {
+        alert("Telegram WebApp API is not available.");
+    }
+}
+
 // Firebase imports and initialization
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
@@ -26,30 +50,6 @@ if (localStorage.getItem("balance") === null) {
 function updateBalanceDisplay() {
     let balance = parseFloat(localStorage.getItem("balance")) || 80; // Default to 80
     document.getElementById("user-balance").textContent = balance;
-}
-
-// Preloader logic
-window.onload = function () {
-    setTimeout(() => {
-        document.getElementById("preloader").style.display = "none";
-        checkForTelegramUsername();
-    }, 100);
-};
-
-// Check for Telegram username and initialize user data
-function checkForTelegramUsername() {
-    if (window.Telegram && Telegram.WebApp) {
-        const telegramUser = Telegram.WebApp.initDataUnsafe.user;
-
-        if (telegramUser && telegramUser.username) {
-            initializeUserData(telegramUser.id, telegramUser.username);
-            showMainContent(telegramUser.username);
-        } else {
-            alert("Unable to retrieve Telegram username. Please ensure the app is opened via Telegram.");
-        }
-    } else {
-        alert("Telegram WebApp API is not available.");
-    }
 }
 
 // Initialize user data in Firebase
