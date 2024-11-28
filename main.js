@@ -1,28 +1,4 @@
-// Preloader logic
-window.onload = function () {
-    setTimeout(() => {
-        document.getElementById("preloader").style.display = "none";
-        checkForTelegramUsername();
-    }, 100);
-};
-
-// Check for Telegram username and initialize user data
-function checkForTelegramUsername() {
-    if (window.Telegram && Telegram.WebApp) {
-        const telegramUser = Telegram.WebApp.initDataUnsafe.user;
-
-        if (telegramUser && telegramUser.username) {
-            initializeUserData(telegramUser.id, telegramUser.username);
-            showMainContent(telegramUser.username);
-        } else {
-            alert("Unable to retrieve Telegram username. Please ensure the app is opened via Telegram.");
-        }
-    } else {
-        alert("Telegram WebApp API is not available.");
-    }
-}
-
-// Firebase imports and initialization
+// Initialize Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
@@ -47,9 +23,37 @@ if (localStorage.getItem("balance") === null) {
     localStorage.setItem("balance", "80");
 }
 
-function updateBalanceDisplay() {
-    let balance = parseFloat(localStorage.getItem("balance")) || 80; // Default to 80
-    document.getElementById("user-balance").textContent = balance;
+// Preloader logic with delay to ensure everything loads
+window.onload = function () {
+    setTimeout(() => {
+        document.getElementById("preloader").style.display = "none";
+        checkForTelegramUsername();
+    }, 1500); // Delay for 1.5 seconds
+};
+
+// Check for Telegram username and initialize user data
+function checkForTelegramUsername() {
+    if (window.Telegram && Telegram.WebApp) {
+        const telegramUser = Telegram.WebApp.initDataUnsafe.user;
+
+        if (telegramUser && telegramUser.username) {
+            initializeUserData(telegramUser.id, telegramUser.username);
+            showMainContent(telegramUser.username);
+        } else {
+            alert("Unable to retrieve Telegram username. Please ensure the app is opened via Telegram.");
+        }
+    } else {
+        alert("Telegram WebApp API is not available.");
+    }
+}
+
+// Show main content and update user details
+function showMainContent(username) {
+    // Show the main content after preloader
+    document.getElementById("main-content").style.display = "flex";
+    document.getElementById("profile-username").textContent = username;
+    updateBalanceDisplay();
+    startCarousel();
 }
 
 // Initialize user data in Firebase
@@ -72,32 +76,10 @@ function initializeUserData(userId, username) {
     }).catch((error) => console.error("Error checking user data:", error));
 }
 
-// Show main content
-function showMainContent(username) {
-    document.getElementById("main-content").style.display = "flex";
-    document.getElementById("profile-username").textContent = username;
-    updateBalanceDisplay();
-    startCarousel();
-}
-
-// Update user balance in Firebase
-function updateUserBalance(userId, newBalance) {
-    const userRef = ref(database, `users/${userId}/balance`);
-    update(userRef, { balance: newBalance })
-        .then(() => console.log("Balance updated successfully"))
-        .catch((error) => console.error("Error updating balance:", error));
-}
-
-// Add referral to user data
-function addReferral(userId, referredUserId) {
-    const referralsRef = ref(database, `users/${userId}/referrals`);
-    get(referralsRef).then((snapshot) => {
-        const referrals = snapshot.exists() ? snapshot.val() : [];
-        referrals.push(referredUserId);
-        update(referralsRef, referrals)
-            .then(() => console.log("Referral added successfully"))
-            .catch((error) => console.error("Error adding referral:", error));
-    }).catch((error) => console.error("Error fetching referrals:", error));
+// Update balance display on page load
+function updateBalanceDisplay() {
+    let balance = parseFloat(localStorage.getItem("balance")) || 80;
+    document.getElementById("user-balance").textContent = `$${balance} SKY`;
 }
 
 // Carousel logic
