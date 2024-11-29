@@ -5,14 +5,13 @@ import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/fire
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDkhGKUTHuJDSn_ZWDC6oWRPCRy-ta10c0",
-    authDomain: "project-1-5b4bd.firebaseapp.com",
-    databaseURL: "https://project-1-5b4bd-default-rtdb.firebaseio.com",
-    projectId: "project-1-5b4bd",
-    storageBucket: "project-1-5b4bd.appspot.com",
-    messagingSenderId: "164037063325",
-    appId: "1:164037063325:web:6cd1610f52d25cb5575a74",
-    measurementId: "G-LLRRJLBBRD",
+    apiKey: "AIzaSyCcs3j9YJL02lmO0lNdSz4C3BE91-sVipM",
+    authDomain: "sopra-f8d9f.firebaseapp.com",
+    projectId: "sopra-f8d9f",
+    storageBucket: "sopra-f8d9f.firebasestorage.app",
+    messagingSenderId: "418083166144",
+    appId: "1:418083166144:web:35f5d5d7820a3788be5a25",
+    measurementId: "G-GNE3R99FWQ"
 };
 
 // Initialize Firebase
