@@ -149,7 +149,7 @@
 <script>
     // Function to generate and display the referral link
     function generateReferralLink() {
-        const username = localStorage.getItem('username') || 'Guest';
+        const username = localStorage.getItem('username') || 'profile-username';
         const referralLink = `https://yourapp.com/?referral=${TelegramUsername}`;
         document.getElementById('referral-link').textContent = referralLink;
     }
