@@ -170,12 +170,6 @@
     document.getElementById('copy-button').addEventListener('click', function() {
         const referralLink = document.getElementById('referral-link').textContent;
         navigator.clipboard.writeText(referralLink)
-            .then(() => {
-                alert('Referral link copied to clipboard!');
-            })
-            .catch(err => {
-                console.error('Error copying text: ', err);
-            });
     });
 
     // Generate and display the referral link and load referrals on page load
