@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earn</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .back-arrow {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+        }
+
+        .back-arrow svg {
+            fill: white;
+            width: 30px;
+            height: 30px;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            margin: 10px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .task-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .task-left img {
+            width: 40px;
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .task-left div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .task-left div span {
+            font-size: 14px;
+        }
+
+        .task-left div .reward {
+            font-size: 12px;
+            color: #bbb;
+        }
+
+        .task-right button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .task-right button:hover {
+            background-color: #45a049;
+        }
+
+        .menu-container {
+            background-color: rgb(0, 0, 0); /* Dark background for the menu */
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Back Arrow -->
+    <div class="back-arrow" onclick="window.location.href='home.html';">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+    </div>
+
+    <h1>Tasks</h1>
+
+    <!-- First YouTube Task -->
+    <div class="task-item" id="task-1">
+        <div class="task-left">
+            <img src="https://img.icons8.com/material-outlined/24/youtube-play.png" alt="YouTube Task">
+            <div>
+                <span>Watch YouTube Video?</span>
+                <span class="reward">+ $25SKY</span>
+            </div>
+        </div>
+        <div class="task-right">
+            <button id="task-button-1">Start</button>
+        </div>
+    </div>
+
+    <!-- Second YouTube Task -->
+    <div class="task-item" id="task-2">
+        <div class="task-left">
+            <img src="https://img.icons8.com/material-outlined/24/youtube-play.png" alt="YouTube Task">
+            <div>
+                <span>Watch YouTube Video?</span>
+                <span class="reward">+ $25SKY</span>
+            </div>
+        </div>
+        <div class="task-right">
+            <button id="task-button-2">Start</button>
+        </div>
+    </div>
+
+    <!-- Third YouTube Task -->
+    <div class="task-item" id="task-3">
+        <div class="task-left">
+            <img src="https://img.icons8.com/material-outlined/24/youtube-play.png" alt="YouTube Task">
+            <div>
+                <span>Watch YouTube Video?</span>
+                <span class="reward">+ $25SKY</span>
+            </div>
+        </div>
+        <div class="task-right">
+            <button id="task-button-3">Start</button>
+        </div>
+    </div>
+
+    <!-- Telegram Task -->
+    <div class="task-item" id="task-4">
+        <div class="task-left">
+            <img src="https://img.icons8.com/material-outlined/24/telegram-app.png" alt="Telegram Task">
+            <div>
+                <span>Join Telegram Group?</span>
+                <span class="reward">+ $15SKY</span>
+            </div>
+        </div>
+        <div class="task-right">
+            <button id="task-button-4">Start</button>
+        </div>
+    </div>
+
+    
+
+    <script>
+        // Task 1 functionality (First YouTube video)
+        let currentTaskState1 = localStorage.getItem('taskState1') || 'start';
+
+        document.getElementById('task-button-1').addEventListener('click', function () {
+            if (currentTaskState1 === 'start') {
+                window.open('https://www.youtube.com/@Johmes', '_blank');
+                document.getElementById('task-button-1').textContent = 'Verify';
+                currentTaskState1 = 'verify';
+                localStorage.setItem('taskState1', currentTaskState1);
+            } else if (currentTaskState1 === 'verify') {
+                // Verification step for task 1
+                localStorage.setItem('currentTask', 'task1'); // Set the current task for verification
+                window.location.href = 'verify.html'; // Redirect to verification page
+            } else if (currentTaskState1 === 'claim') {
+                let balance = parseFloat(localStorage.getItem('balance')) || 80;
+                balance += 25; // Add 25 points for the YouTube task
+                localStorage.setItem('balance', balance);
+                alert('Claimed $25 SKY!');
+                document.getElementById('task-1').remove(); // Remove task after claiming
+                localStorage.removeItem('taskState1');
+            }
+        });
+
+        // Task 2 functionality (Second YouTube video)
+        let currentTaskState2 = localStorage.getItem('taskState2') || 'start';
+
+        document.getElementById('task-button-2').addEventListener('click', function () {
+            if (currentTaskState2 === 'start') {
+                window.open('https://www.youtube.com/watch?v=v6h3A3NMns0', '_blank');
+                document.getElementById('task-button-2').textContent = 'Verify';
+                currentTaskState2 = 'verify';
+                localStorage.setItem('taskState2', currentTaskState2);
+            } else if (currentTaskState2 === 'verify') {
+                // Verification step for task 2
+                localStorage.setItem('currentTask', 'task2'); // Set the current task for verification
+                window.location.href = 'verify.html'; // Redirect to verification page
+            } else if (currentTaskState2 === 'claim') {
+                let balance = parseFloat(localStorage.getItem('balance')) || 80;
+                balance += 25; // Add 25 points for the second YouTube task
+                localStorage.setItem('balance', balance);
+                alert('Claimed $25 SKY!');
+                document.getElementById('task-2').remove(); // Remove task after claiming
+                localStorage.removeItem('taskState2');
+            }
+        });
+
+        // Task 3 functionality (Second YouTube video)
+        let currentTaskState3 = localStorage.getItem('taskState3') || 'start';
+
+        document.getElementById('task-button-3').addEventListener('click', function () {
+            if (currentTaskState3 === 'start') {
+                window.open('https://www.youtube.com/watch?v=v6h3A3NMns0', '_blank');
+                document.getElementById('task-button-3').textContent = 'Verify';
+                currentTaskState3 = 'verify';
+                localStorage.setItem('taskState3', currentTaskState3);
+            } else if (currentTaskState3 === 'verify') {
+                // Verification step for task 3
+                localStorage.setItem('currentTask', 'task3'); // Set the current task for verification
+                window.location.href = 'verify.html'; // Redirect to verification page
+            } else if (currentTaskState3 === 'claim') {
+                let balance = parseFloat(localStorage.getItem('balance')) || 80;
+                balance += 25; // Add 25 points for the second YouTube task
+                localStorage.setItem('balance', balance);
+                alert('Claimed $25 SKY!');
+                document.getElementById('task-3').remove(); // Remove task after claiming
+                localStorage.removeItem('taskState3');
+            }
+        });
+
+        // Telegram Task Button
+        document.getElementById('task-button-4').addEventListener('click', function () {
+            if (currentTaskState4 === 'start') {
+                window.open('https://t.me/johmes_research', '_blank');
+                document.getElementById('task-button-4').textContent = 'Claim';
+                currentTaskState4 = 'claim';
+                localStorage.setItem(taskKey4, currentTaskState4); // Update task state
+            } else if (currentTaskState4 === 'claim') {
+                let balance = parseFloat(localStorage.getItem('balance')) || 80;
+                balance += 15; // Add 15 points for the Telegram task
+                localStorage.setItem('balance', balance);
+                alert('Claimed $15 SKY!');
+                document.getElementById('task-4').remove(); // Remove task after claiming
+            }
+        });
+
+        const taskKey4 = 'TaskState4';
+        let currentTaskState4 = localStorage.getItem(taskKey4) || 'start';
+
+        // Check task state on page load
+        if (currentTaskState1 === 'claim') {
+            document.getElementById('task-1').remove(); // Remove task if claimed
+        } else if (currentTaskState1 === 'verify') {
+            document.getElementById('task-button-1').textContent = 'Verify';
+        } else if (currentTaskState1 === 'start') {
+            document.getElementById('task-button-1').textContent = 'Start';
+        }
+
+        
+        if (currentTaskState2 === 'claim') {
+            document.getElementById('task-2').remove(); // Remove task if claimed
+        } else if (currentTaskState2 === 'verify') {
+            document.getElementById('task-button-2').textContent = 'Verify';
+        } else if (currentTaskState2 === 'start') {
+            document.getElementById('task-button-2').textContent = 'Start';
+        }
+
+
+        if (currentTaskState3 === 'claim') {
+            document.getElementById('task-3').remove(); // Remove task if claimed
+        } else if (currentTaskState3 === 'verify') {
+            document.getElementById('task-button-3').textContent = 'Verify';
+        } else if (currentTaskState3 === 'start') {
+            document.getElementById('task-button-3').textContent = 'Start';
+        }
+
+        if (currentTaskState4 === 'claim') {
+            document.getElementById('task-4').remove(); // Remove Telegram task if claimed
+        }
+    </script>
+
+</body>
+</html>

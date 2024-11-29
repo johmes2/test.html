@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Task</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .verification-container {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            text-align: center;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 80%; /* Adjusted width for better centering */
+            padding: 10px;
+            margin: 0 10px; /* Adds horizontal spacing */
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Verify Task</h1>
+    <div class="verification-container">
+        <div class="input-container">
+            <input type="text" id="verification-code" placeholder="Enter verification code" />
+        </div>
+        <button id="verify-button">Verify</button>
+    </div>
+
+    <script>
+        document.getElementById('verify-button').addEventListener('click', function () {
+            const codeInput = document.getElementById('verification-code').value;
+            const currentTask = localStorage.getItem('currentTask'); // Get the current task for verification
+
+            let expectedCode;
+
+            // Determine the expected code based on the current task
+            if (currentTask === 'task1') {
+                expectedCode = '1234'; // Expected verification code for task 1
+            } else if (currentTask === 'task2') {
+                expectedCode = 'TAYO'; // Expected verification code for task 2
+            } else if (currentTask === 'task3') {
+                expectedCode = 'BRO'; // Expected verification code for task 3
+            }
+
+            if (codeInput === expectedCode) {
+                alert('Verification successful!');
+                let balance = parseFloat(localStorage.getItem('balance')) || 0;
+                
+                // Add points based on the task
+                if (currentTask === 'task1') {
+                    balance += 25; // Add 25 points for task 1
+                } else if (currentTask === 'task2') {
+                    balance += 25; // Add 25 points for task 2
+                } else if (currentTask === 'task3') {
+                    balance += 25; // Add 25 points for task 3
+                }
+
+                localStorage.setItem('balance', balance);
+                localStorage.setItem(`taskState${currentTask.charAt(currentTask.length - 1)}`, 'claim'); // Mark task as claimable
+                window.location.href = 'earn.html'; // Redirect back to earn page
+            } else {
+                alert('Incorrect verification code. Please try again.');
+            }
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project</title>
+    <style>
+        /* Global styles */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling during preloader */
+        }
+
+        /* Preloader styles */
+        #preloader {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            background-color: #000;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        #preloader img {
+            max-width: 50%;
+            height: auto;
+        }
+
+        /* Main content (profile, carousel, menu) styles */
+        #main-content {
+            display: none; /* Hidden until preloader finishes */
+            flex-direction: column;
+            justify-content: space-between;
+            height: auto;
+            background-image: url('assets/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .profile-container {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .profile-container img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 15px;
+            border: 2px solid white;
+        }
+
+        .profile-container h1 {
+            font-size: 24px;
+            margin: 10px 0;
+            color: rgb(0, 0, 0);
+        }
+
+        .balance {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: black;
+            font-weight: bold;
+        }
+
+        .animations {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            height: 400px;
+            margin: 20px 5px 150px;
+            border-radius: 20px;
+            position: relative;
+        }
+
+        .carousel-images {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-images img {
+            width: 100%;
+            height: auto;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        .menu-container {
+            background-color: rgb(0, 0, 0);
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .menu-container a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .menu-container img {
+            width: 30px;
+            margin-bottom: 5px;
+        }
+
+        .menu-container span {
+            display: block;
+            font-size: 12px;
+        }
+
+        /* Create username form styles */
+        #username-form {
+            display: none; /* Hidden initially */
+            height: 100vh;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #username-form h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #username-form input[type="text"] {
+            padding: 10px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #username-form button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div id="preloader">
+        <img src="assets/preloader.gif" alt="Loading...">
+    </div>
+
+    <!-- Create Username Form -->
+    <div id="username-form">
+        <h1>Create Your Username</h1>
+        <input type="text" id="usernameInput" placeholder="Enter your username" required>
+        <button onclick="saveUsername()">Submit</button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <div class="profile-container">
+            <img src="assets/profile-picture.png" alt="Profile Image">
+            <h1 id="profile-username"><strong>User</strong></h1>
+            <div class="balance">$SKY <span id="user-balance">80.00</span></div>
+        </div>
+        <div class="animations">
+            <div class="carousel-images">
+                <img src="assets/animation1.jpg" alt="Animation 1">
+                <img src="assets/animation1.jpg" alt="Animation 2">
+                <img src="assets/animation1.jpg" alt="Animation 3">
+            </div>
+        </div>
+        <div class="menu-container">
+            <a href="home.html">
+                <img src="assets/home.png" alt="Home">
+                <span>Home</span>
+            </a>
+            <a href="earn.html">
+                <img src="assets/earn.png" alt="Earn">
+                <span>Earn</span>
+            </a>
+            <a href="frens.html">
+                <img src="assets/frens.png" alt="Frens">
+                <span>Frens</span>
+            </a>
+            <a href="wallet.html">
+                <img src="assets/wallet.png" alt="Wallet">
+                <span>Wallet</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+
+        // Initialize balance to 80 if not already set
+        if (localStorage.getItem('balance') === null) {
+            localStorage.setItem('balance', '80');
+        }
+
+        function updateBalanceDisplay() {
+        let balance = parseFloat(localStorage.getItem('balance')) || 80; // Default to 80
+        console.log(`Current Balance: $${balance} SKY`); // Debugging step
+        // Optional: Update a balance display element on the page
+        // document.getElementById('balance-display').textContent = `$${balance} SKY`;
+        }
+
+        // Call this function on page load
+        updateBalanceDisplay();
+
+        // Preloader logic
+        window.onload = function () {
+            setTimeout(() => {
+                document.getElementById('preloader').style.display = 'none';
+                checkForUsername();
+            }, 100);
+        };
+
+        // Check if username exists
+        function checkForUsername() {
+            const savedUsername = localStorage.getItem('username');
+            if (savedUsername) {
+                showMainContent(savedUsername);
+            } else {
+                document.getElementById('username-form').style.display = 'flex';
+            }
+        }
+
+        // Save username
+        function saveUsername() {
+            const username = document.getElementById('usernameInput').value.trim();
+            if (username) {
+                const existingUsernames = JSON.parse(localStorage.getItem('usernames')) || [];
+                if (existingUsernames.includes(username)) {
+                    alert('This username is already taken. Please choose another one.');
+                } else {
+                    localStorage.setItem('username', username);
+                    existingUsernames.push(username);
+                    localStorage.setItem('usernames', JSON.stringify(existingUsernames));
+                    showMainContent(username);
+                }
+            } else {
+                alert('Please enter a valid username.');
+            }
+        }
+
+        // Show main content
+        function showMainContent(username) {
+            document.getElementById('username-form').style.display = 'none';
+            document.getElementById('main-content').style.display = 'flex';
+            document.getElementById('profile-username').textContent = username;
+            const balance = localStorage.getItem('balance') || 80;
+            document.getElementById('user-balance').textContent = balance;
+            startCarousel();
+        }
+
+        // Carousel logic
+        function startCarousel() {
+            const carousel = document.querySelector('.carousel-images');
+            const images = document.querySelectorAll('.carousel-images img');
+            let index = 0;
+            setInterval(() => {
+                index = (index + 1) % images.length;
+                carousel.style.transform = `translateX(-${index * 100}%)`;
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

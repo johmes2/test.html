@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friends</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: auto;
+            margin: 0;
+            background-image: url('assets/background\ 03.png');
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .referral-section {
+            margin: 20px;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .referral-link {
+            font-weight: bold;
+            color: #4CAF50; /* Green color for the link */
+        }
+
+        .copy-button {
+            background-color: #4CAF50; /* Button color */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .copy-button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .referrals-list {
+            margin: 10px 20px; /* Adjusted margins to maintain spacing */
+            padding: 15px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+
+        .referrals-list p {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .referrals-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .referrals-list li {
+            padding: 10px;
+            background-color: #444;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        .menu-container {
+            background-color: rgb(0, 0, 0); /* Dark background for the menu */
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .menu-container a {
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .menu-container img {
+            width: 30px; /* Icon size */
+            margin-bottom: 5px;
+        }
+
+        .menu-container span {
+            display: block;
+            font-size: 12px; /* Text size for menu items */
+        }
+    </style>
+</head>
+<body>
+
+<h1>Friends</h1>
+
+<!-- Unique Referral Link Section -->
+<div class="referral-section">
+    <p>Your unique referral link:</p>
+    <p class="referral-link" id="referral-link">https://yourapp.com/?referral=yourusername</p>
+    <button class="copy-button" id="copy-button">Copy</button>
+</div>
+
+<!-- Referrals List Section -->
+<div class="referrals-list">
+    <p>List of Referrals:</p>
+    <ul id="referral-list">
+        <!-- Referral usernames will be added here -->
+    </ul>
+</div>
+
+<!-- Bottom Navigation Menu -->
+<div class="menu-container">
+    <a href="home.html">
+        <img src="assets/home.png" alt="Home">
+        <span>Home</span>
+    </a>
+    <a href="earn.html">
+        <img src="assets/earn.png" alt="Earn">
+        <span>Earn</span>
+    </a>
+    <a href="frens.html">
+        <img src="assets/frens.png" alt="Frens">
+        <span>Frens</span>
+    </a>
+    <a href="wallet.html">
+        <img src="assets/wallet.png" alt="Wallet">
+        <span>Wallet</span>
+    </a>
+</div>
+
+<!-- JavaScript to handle referrals and copying link -->
+<script>
+    // Function to generate and display the referral link
+    function generateReferralLink() {
+        const username = localStorage.getItem('username') || 'Guest';
+        const referralLink = `https://yourapp.com/?referral=${username}`;
+        document.getElementById('referral-link').textContent = referralLink;
+    }
+
+    // Function to load referrals from localStorage
+    function loadReferrals() {
+        const referrals = JSON.parse(localStorage.getItem('referrals')) || [];
+        const referralList = document.getElementById('referral-list');
+
+        referrals.forEach(referral => {
+            const li = document.createElement('li');
+            li.textContent = referral;
+            referralList.appendChild(li);
+        });
+    }
+
+    // Copy referral link to clipboard
+    document.getElementById('copy-button').addEventListener('click', function() {
+        const referralLink = document.getElementById('referral-link').textContent;
+        navigator.clipboard.writeText(referralLink)
+            .then(() => {
+                alert('Referral link copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Error copying text: ', err);
+            });
+    });
+
+    // Generate and display the referral link and load referrals on page load
+    generateReferralLink();
+    loadReferrals();
+</script>
+
+</body>
+</html>
