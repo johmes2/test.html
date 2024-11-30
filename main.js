@@ -82,23 +82,28 @@ function showMainContent(username) {
 
 // Update user balance in Firebase
 function updateUserBalance(userId, newBalance) {
-    const userRef = ref(database, `users/${userId}/balance`);
+    const userRef = ref(database, `users/${userId}`);
     update(userRef, { balance: newBalance })
         .then(() => console.log("Balance updated successfully"))
         .catch((error) => console.error("Error updating balance:", error));
 }
 
+
 // Add referral to user data
 function addReferral(userId, referredUserId) {
-    const referralsRef = ref(database, `users/${userId}/referrals`);
-    get(referralsRef).then((snapshot) => {
-        const referrals = snapshot.exists() ? snapshot.val() : [];
-        referrals.push(referredUserId);
-        update(referralsRef, referrals)
-            .then(() => console.log("Referral added successfully"))
-            .catch((error) => console.error("Error adding referral:", error));
-    }).catch((error) => console.error("Error fetching referrals:", error));
+    const userRef = ref(database, `users/${userId}`);
+    get(userRef).then((snapshot) => {
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            const referrals = userData.referrals || [];
+            referrals.push(referredUserId);
+            update(userRef, { referrals })
+                .then(() => console.log("Referral added successfully"))
+                .catch((error) => console.error("Error adding referral:", error));
+        }
+    }).catch((error) => console.error("Error fetching user data:", error));
 }
+
 
 // Carousel logic
 function startCarousel() {
