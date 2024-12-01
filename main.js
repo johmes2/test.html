@@ -1,7 +1,7 @@
 // Firebase imports and initialization
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-analytics.js";
-import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { getDatabase, ref, set, get, update, onValue } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -54,7 +54,7 @@ function checkForTelegramUsername() {
 
 // Initialize user data in Firebase
 function initializeUserData(userId, username) {
-    const userRef = ref(database, `users/${userId}`);
+    const userRef = ref(database, users/${userId});
     get(userRef).then((snapshot) => {
         if (!snapshot.exists()) {
             // Save new user data
@@ -78,32 +78,45 @@ function showMainContent(username) {
     document.getElementById("profile-username").textContent = username;
     updateBalanceDisplay();
     startCarousel();
+
+    // Add Firebase listener to track balance updates in real-time
+    listenForBalanceUpdates(username);
 }
 
 // Update user balance in Firebase
 function updateUserBalance(userId, newBalance) {
-    const userRef = ref(database, `users/${userId}`);
+    const userRef = ref(database, users/${userId}/balance);
     update(userRef, { balance: newBalance })
         .then(() => console.log("Balance updated successfully"))
         .catch((error) => console.error("Error updating balance:", error));
 }
 
-
 // Add referral to user data
 function addReferral(userId, referredUserId) {
-    const userRef = ref(database, `users/${userId}`);
-    get(userRef).then((snapshot) => {
-        if (snapshot.exists()) {
-            const userData = snapshot.val();
-            const referrals = userData.referrals || [];
-            referrals.push(referredUserId);
-            update(userRef, { referrals })
-                .then(() => console.log("Referral added successfully"))
-                .catch((error) => console.error("Error adding referral:", error));
-        }
-    }).catch((error) => console.error("Error fetching user data:", error));
+    const referralsRef = ref(database, users/${userId}/referrals);
+    get(referralsRef).then((snapshot) => {
+        const referrals = snapshot.exists() ? snapshot.val() : [];
+        referrals.push(referredUserId);
+        update(referralsRef, referrals)
+            .then(() => console.log("Referral added successfully"))
+            .catch((error) => console.error("Error adding referral:", error));
+    }).catch((error) => console.error("Error fetching referrals:", error));
 }
 
+// Listen for real-time balance updates
+function listenForBalanceUpdates(userId) {
+    const userRef = ref(database, users/${userId}/balance);
+
+    // Listen for value changes in the balance field
+    onValue(userRef, (snapshot) => {
+        const newBalance = snapshot.val();
+        if (newBalance !== null) {
+            localStorage.setItem("balance", newBalance.toString());
+            updateBalanceDisplay();  // Update the UI with the new balance
+            console.log("Balance updated in real-time: ", newBalance);
+        }
+    });
+}
 
 // Carousel logic
 function startCarousel() {
@@ -112,6 +125,6 @@ function startCarousel() {
     let index = 0;
     setInterval(() => {
         index = (index + 1) % images.length;
-        carousel.style.transform = `translateX(-${index * 100}%)`;
+        carousel.style.transform = translateX(-${index * 100}%);
     }, 5000);
 }
